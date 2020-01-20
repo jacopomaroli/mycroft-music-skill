@@ -161,7 +161,7 @@ class MP3DemoSkill(MycroftSkill):
         self.yt_search_key = search_key
         self.get_individual_video_link()
         song = self.download_all_videos(dl_limit=num)
-        print song
+        print(song)
         # for some randmness we can increase above dl limit and randomly get one of the results
         self.video_link_title_dict.clear()
         self.video_link_title_keylist [:] = []
@@ -200,7 +200,7 @@ class MP3DemoSkill(MycroftSkill):
             video_title = n.attributes['title'] #"Mix" in video_title[:4]  or "mix" i(n video_title[:4] or
             ile = video_title.lower()
             if "cover" in ile or "live" in ile or "acustic" in ile or "acoustic" in ile or "lesson" in ile:
-                print "found blacklisted term, bypassing song: " + ile
+                print("found blacklisted term, bypassing song: " + ile)
                 pass #dont want these
             else:
                 each_video_link_title_dict[video_title] = 'https://www.youtube.com' + video_link
@@ -212,7 +212,7 @@ class MP3DemoSkill(MycroftSkill):
             Will limit by dl_limit.
         """
         counter = dl_limit
-        self.video_link_title_keylist = self.video_link_title_dict.keys()
+        self.video_link_title_keylist = list(self.video_link_title_dict.keys())
         music = []
         for title in self.video_link_title_keylist:
             try:
@@ -220,7 +220,7 @@ class MP3DemoSkill(MycroftSkill):
                 # print 'downloading title with counter: ', counter
                 if not counter:
                     return random.choice(music)  #some margin for randomness, first result isnt always accurate, (gets slower...)
-                print 'downloading title: ', title
+                print('downloading title: ', title)
 
                 self.add_result("Dowloaded_Song", title)
 
@@ -228,7 +228,7 @@ class MP3DemoSkill(MycroftSkill):
                 music.append(path)
                 counter = counter - 1
             except:
-                print "illegal characters in youtube name" + title + "\n trying next result"
+                print("illegal characters in youtube name" + title + "\n trying next result")
 
     def get_band(self):
         while True:
@@ -267,7 +267,7 @@ class MP3DemoSkill(MycroftSkill):
              #try to get all audio streams
                 audiostreams = video.audiostreams
                 i = 0
-                print"couldnt get best stream, trying all streams"
+                print("couldnt get best stream, trying all streams")
                 for stream in audiostreams:
                     bestaudio = audiostreams[i]
                     # update video title and dl path with exytension
@@ -281,7 +281,7 @@ class MP3DemoSkill(MycroftSkill):
                     i += 1
         #try all streams, some videos randomly fail
         except:
-            print 'Have problem downloading this file', video_title
+            print('Have problem downloading this file', video_title)
 
     def reformat_search_for_spaces(self):
         """
@@ -315,7 +315,7 @@ class MP3DemoSkill(MycroftSkill):
             url = URL(url_target)
             dom_object = DOM(url.download(cached=True))
         except:
-            print 'Problem retrieving data for this url: ', url_target
+            print('Problem retrieving data for this url: ', url_target)
             self.url_query_timeout = 1
 
         return dom_object
@@ -334,13 +334,13 @@ class MP3DemoSkill(MycroftSkill):
         return dom_obj(tag_expr)
 
     def stop(self):#not working on ANY skill ?
-        print 'trying to stop'
+        print('trying to stop')
         if self.process:# and self.process.poll() is None:
             # No reason to say "music stopped", that is obvious!
             # self.speak_dialog('music.stop')
             self.process.terminate()
             self.process.wait()
-            print "stopped"
+            print("stopped")
 
 
 def create_skill():
